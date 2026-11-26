@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trade ledger — ERD</title>
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --surface: #ffffff;
+      --border: #d4d4d8;
+      --text: #18181b;
+      --muted: #71717a;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --market: #059669;
+      --market-soft: #d1fae5;
+      --lookup: #7c3aed;
+      --lookup-soft: #ede9fe;
+      --fact: #ea580c;
+      --fact-soft: #ffedd5;
+      --line: #a1a1aa;
+    }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  header {
+    padding: 24px 24px 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  header h1 {
+    margin: 0 0 6px;
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  header p {
+    margin: 0;
+    color: var(--muted);
+    max-width: 52rem;
+  }
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin: 16px 0 24px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .swatch--access { background: var(--accent-soft); border-color: #93c5fd; }
+  .swatch--market { background: var(--market-soft); border-color: #6ee7b7; }
+  .swatch--lookup { background: var(--lookup-soft); border-color: #c4b5fd; }
+  .swatch--ref { background: #f4f4f5; }
+  .swatch--fact { background: var(--fact-soft); border-color: #fdba74; }
+
+  .diagram-wrap {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 720px;
+  }
+
+  #erd-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .entity-list {
+    margin-top: 28px;
+    display: grid;
+    gap: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .entity-list { grid-template-columns: 1fr 1fr; }
+  }
+
+  .entity-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .entity-card__head {
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .entity-card__head--access { background: var(--accent-soft); }
+  .entity-card__head--market { background: var(--market-soft); }
+  .entity-card__head--lookup { background: var(--lookup-soft); }
+  .entity-card__head--ref { background: #fafafa; }
+  .entity-card__head--fact { background: var(--fact-soft); }
+
+  table.cols {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  table.cols th,
+  table.cols td {
+    padding: 6px 14px;
+    text-align: left;
+    border-bottom: 1px solid #f4f4f5;
+  }
+
+  table.cols th {
+    width: 38%;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  table.cols tr:last-child td,
+  table.cols tr:last-child th {
+    border-bottom: none;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  .tag-pk { background: #fef3c7; color: #92400e; }
+  .tag-fk { background: #e0e7ff; color: #3730a3; }
+  .tag-uk { background: #fce7f3; color: #9d174d; }
+
+  footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Trade ledger entity relationship diagram</h1>
+    <p>
+      SQLite schema from <code>001_schema.sql</code>. Solid arrows point from child (FK) to parent.
+      Audit fields <code>created_at</code>, <code>updated_at</code>, <code>created_by</code>, <code>updated_by</code> exist on domain tables but are abbreviated in the canvas.
+    </p>
+  </header>
+
+  <main>
+    <div class="legend" role="list" aria-label="Entity categories">
+      <span class="legend-item" role="listitem"><span class="swatch swatch--access" aria-hidden="true"></span> Access</span>
+      <span class="legend-item" role="listitem"><span class="swatch swatch--market" aria-hidden="true"></span> Market data</span>
+      <span class="legend-item" role="listitem"><span class="swatch swatch--lookup" aria-hidden="true"></span> Lookups</span>
+      <span class="legend-item" role="listitem"><span class="swatch swatch--ref" aria-hidden="true"></span> Reference</span>
+      <span class="legend-item" role="listitem"><span class="swatch swatch--fact" aria-hidden="true"></span> Fact</span>
+    </div>
+
+    <div class="diagram-wrap">
+      <svg id="erd-svg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" aria-labelledby="erd-title erd-desc">
+        <title id="erd-title">Trade ledger ERD</title>
+        <desc id="erd-desc">Database tables and foreign key relationships for trade capture and market data.</desc>
+
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#71717a" />
+          </marker>
+        </defs>
+
+        <!-- Connectors (drawn under boxes) -->
+        <g stroke="#a1a1aa" stroke-width="1.2" fill="none" marker-end="url(#arrow)">
+          <path d="M 155 118 L 155 168" />
+          <path d="M 155 248 L 155 298" />
+          <path d="M 280 330 L 330 330" />
+          <path d="M 540 330 L 590 330" />
+          <path d="M 780 330 L 830 330" />
+          <path d="M 155 398 L 155 448" />
+          <path d="M 380 498 L 430 498" />
+          <path d="M 620 498 L 670 498" />
+          <path d="M 860 498 L 910 498" />
+          <path d="M 500 118 L 500 168" />
+          <path d="M 500 248 L 500 298 L 430 330" />
+          <path d="M 155 498 L 155 548 L 430 598" />
+          <path d="M 155 618 L 155 668 L 500 668" />
+        </g>
+
+        <!-- role -->
+        <g transform="translate(80, 68)">
+          <rect width="150" height="52" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" />
+          <text x="75" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">role</text>
+          <text x="75" y="40" text-anchor="middle" font-size="11" fill="#71717a">role_id · role</text>
+        </g>
+
+        <!-- users -->
+        <g transform="translate(80, 168)">
+          <rect width="150" height="52" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" />
+          <text x="75" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">users</text>
+          <text x="75" y="40" text-anchor="middle" font-size="11" fill="#71717a">user_id · role_id FK</text>
+        </g>
+
+        <!-- trade_status -->
+        <g transform="translate(80, 298)">
+          <rect width="150" height="52" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" />
+          <text x="75" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">trade_status</text>
+          <text x="75" y="40" text-anchor="middle" font-size="11" fill="#71717a">draft → done</text>
+        </g>
+
+        <!-- trade_side -->
+        <g transform="translate(80, 448)">
+          <rect width="150" height="52" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" />
+          <text x="75" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">trade_side</text>
+          <text x="75" y="40" text-anchor="middle" font-size="11" fill="#71717a">buy · sell</text>
+        </g>
+
+        <!-- instruments -->
+        <g transform="translate(420, 68)">
+          <rect width="160" height="52" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.5" />
+          <text x="80" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">instruments</text>
+          <text x="80" y="40" text-anchor="middle" font-size="11" fill="#71717a">instrument_id · code</text>
+        </g>
+
+        <!-- daily_prices -->
+        <g transform="translate(420, 168)">
+          <rect width="160" height="52" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.5" />
+          <text x="80" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">daily_prices</text>
+          <text x="80" y="40" text-anchor="middle" font-size="11" fill="#71717a">PK (instrument_id, date)</text>
+        </g>
+
+        <!-- funds -->
+        <g transform="translate(330, 298)">
+          <rect width="130" height="52" rx="6" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5" />
+          <text x="65" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">funds</text>
+          <text x="65" y="40" text-anchor="middle" font-size="11" fill="#71717a">fund_id · code</text>
+        </g>
+
+        <!-- brokers -->
+        <g transform="translate(590, 298)">
+          <rect width="130" height="52" rx="6" fill="#ffffff" stroke="#d4d4d8" stroke-width="1.5" />
+          <text x="65" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">brokers</text>
+          <text x="65" y="40" text-anchor="middle" font-size="11" fill="#71717a">broker_id · name</text>
+        </g>
+
+        <!-- instruments (trade link) -->
+        <g transform="translate(830, 298)">
+          <rect width="160" height="52" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.5" />
+          <text x="80" y="22" text-anchor="middle" font-weight="600" font-size="13" fill="#18181b">instruments</text>
+          <text x="80" y="40" text-anchor="middle" font-size="11" fill="#71717a">↔ trades</text>
+        </g>
+
+        <!-- trades CENTRAL -->
+        <g transform="translate(300, 548)">
+          <rect width="500" height="88" rx="8" fill="#ffedd5" stroke="#ea580c" stroke-width="2" />
+          <text x="250" y="28" text-anchor="middle" font-weight="700" font-size="15" fill="#18181b">trades</text>
+          <text x="250" y="50" text-anchor="middle" font-size="11" fill="#3f3f46">
+            trade_id · trade_date · fund_id · instrument_id · trade_side_id · broker_id · trade_status_id
+          </text>
+          <text x="250" y="68" text-anchor="middle" font-size="11" fill="#71717a">
+            quantity · order_price · executed_price · consideration_zar · workflow timestamps
+          </text>
+        </g>
+
+        <!-- fund_positions view -->
+        <g transform="translate(380, 668)">
+          <rect width="340" height="44" rx="6" fill="#fafafa" stroke="#a1a1aa" stroke-width="1.2" stroke-dasharray="6 4" />
+          <text x="170" y="27" text-anchor="middle" font-weight="600" font-size="12" fill="#52525b">VIEW fund_positions</text>
+        </g>
+
+        <!-- Region labels -->
+        <text x="155" y="48" text-anchor="middle" font-size="10" fill="#71717a" font-weight="600">ACCESS &amp; LOOKUPS</text>
+        <text x="500" y="48" text-anchor="middle" font-size="10" fill="#71717a" font-weight="600">MARKET DATA</text>
+        <text x="655" y="280" text-anchor="middle" font-size="10" fill="#71717a" font-weight="600">REFERENCE</text>
+        <text x="550" y="530" text-anchor="middle" font-size="10" fill="#71717a" font-weight="600">FACT</text>
+      </svg>
+    </div>
+
+    <section class="entity-list" aria-label="Table columns">
+      <article class="entity-card">
+        <div class="entity-card__head entity-card__head--fact">trades</div>
+        <table class="cols">
+          <tr><th>trade_id</th><td>INTEGER PK</td></tr>
+          <tr><th>trade_date</th><td>TEXT (ISO date)</td></tr>
+          <tr><th>fund_id</th><td>INTEGER <span class="tag tag-fk">FK</span></td></tr>
+          <tr><th>instrument_id</th><td>INTEGER <span class="tag tag-fk">FK</span></td></tr>
+          <tr><th>trade_side_id</th><td>INTEGER <span class="tag tag-fk">FK</span></td></tr>
+          <tr><th>broker_id</th><td>INTEGER <span class="tag tag-fk">FK</span></td></tr>
+          <tr><th>trade_status_id</th><td>INTEGER <span class="tag tag-fk">FK</span> default 1 (draft)</td></tr>
+          <tr><th>quantity, order_price</th><td>REAL</td></tr>
+          <tr><th>executed_price, consideration_zar</th><td>REAL nullable</td></tr>
+          <tr><th>sent_to_broker_at … completed_at</th><td>workflow timestamps</td></tr>
+        </table>
+      </article>
+
+      <article class="entity-card">
+        <div class="entity-card__head entity-card__head--market">instruments + daily_prices</div>
+        <table class="cols">
+          <tr><th>instruments.instrument_id</th><td>INTEGER <span class="tag tag-pk">PK</span></td></tr>
+          <tr><th>instruments.code</th><td>TEXT <span class="tag tag-uk">UK</span></td></tr>
+          <tr><th>quote_unit, contract_size</th><td>ZAc, PCT_NOMINAL, INDEX_POINTS …</td></tr>
+          <tr><th>daily_prices</th><td>composite PK (instrument_id, price_date)</td></tr>
+          <tr><th>close_price, accrued_per_100</th><td>last close + bond accrued</td></tr>
+        </table>
+      </article>
+
+      <article class="entity-card">
+        <div class="entity-card__head entity-card__head--ref">funds · brokers</div>
+        <table class="cols">
+          <tr><th>funds</th><td>KESCON, FYNBAL, BAOGLB, PROINC</td></tr>
+          <tr><th>brokers</th><td>Kudu, Impala, Springbok</td></tr>
+          <tr><th>is_active</th><td>0 / 1</td></tr>
+          <tr><th>audit</th><td>created_at, updated_at, created_by, updated_by → users</td></tr>
+        </table>
+      </article>
+
+      <article class="entity-card">
+        <div class="entity-card__head entity-card__head--lookup">trade_status · trade_side · users</div>
+        <table class="cols">
+          <tr><th>trade_status</th><td>draft, sent_to_broker, executed, done</td></tr>
+          <tr><th>trade_side</th><td>buy, sell</td></tr>
+          <tr><th>role</th><td>trader, operations, administrator</td></tr>
+          <tr><th>users</th><td>seed user <code>system</code> for loads</td></tr>
+        </table>
+      </article>
+    </section>
+
+    <footer>
+      Open this file: <code>database/erd.html</code> · Regenerate DB: <code>001_schema.sql</code> then <code>002_data.sql</code>
+    </footer>
+  </main>
+</body>
+</html>

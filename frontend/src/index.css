@@ -1,0 +1,181 @@
+/* Light: red / black / white */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --text: #0a0a0a;
+  --muted: #525252;
+  --border: #0a0a0a;
+  --border-subtle: #d4d4d4;
+  --input-bg: #ffffff;
+  --input-fg: #0a0a0a;
+
+  --accent: #c41e3a;
+  --accent-hover: #9e1830;
+  --accent-soft: #fde8ec;
+  --accent-fg: #ffffff;
+
+  --brand: #c41e3a;
+  --buy: #0a0a0a;
+  --buy-bg: #ebebeb;
+  --sell: #c41e3a;
+  --sell-bg: #fde8ec;
+
+  --row-warn: #fff1f2;
+  --table-border: #e5e5e5;
+  --hover: #f5f5f5;
+  --pill-muted-bg: #e5e5e5;
+  --badge-neutral: #e5e5e5;
+  --workflow-track: #d4d4d4;
+  --workflow-done: #737373;
+  --overlay: rgb(0 0 0 / 60%);
+  --shadow: rgb(0 0 0 / 12%);
+  --card-accent-border: #c41e3a;
+  --card-accent-gradient: linear-gradient(180deg, #fff5f6 0%, #ffffff 140px);
+
+  --status-done-bg: #e5e5e5;
+  --status-executed-bg: #fde8ec;
+  --status-sent-bg: #fafafa;
+
+  --alert-error-bg: #fde8ec;
+  --alert-error-fg: #7f0f22;
+  --alert-error-border: #c41e3a;
+  --alert-warn-bg: #fffbeb;
+  --alert-warn-fg: #0a0a0a;
+  --alert-warn-border: #0a0a0a;
+
+  --focus-ring: rgb(196 30 58 / 25%);
+}
+
+/* Dark: black / white + green accent (+ red for sell / errors) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --bg: #050505;
+    --surface: #0f0f0f;
+    --surface-elevated: #161616;
+    --text: #fafafa;
+    --muted: #a3a3a3;
+    --border: #2e2e2e;
+    --border-subtle: #262626;
+    --input-bg: #141414;
+    --input-fg: #fafafa;
+
+    --accent: #22c55e;
+    --accent-hover: #16a34a;
+    --accent-soft: #0d2818;
+    --accent-fg: #ffffff;
+
+    --brand: #ef4444;
+    --buy: #22c55e;
+    --buy-bg: #0d2818;
+    --sell: #ef4444;
+    --sell-bg: #2a1010;
+
+    --row-warn: #1a1208;
+    --table-border: #262626;
+    --hover: #1a1a1a;
+    --pill-muted-bg: #262626;
+    --badge-neutral: #262626;
+    --workflow-track: #333333;
+    --workflow-done: #22c55e;
+    --overlay: rgb(0 0 0 / 75%);
+    --shadow: rgb(0 0 0 / 45%);
+    --card-accent-border: #22c55e;
+    --card-accent-gradient: linear-gradient(180deg, #0d2818 0%, #0f0f0f 140px);
+
+    --status-done-bg: #0d2818;
+    --status-executed-bg: #1a1a2e;
+    --status-sent-bg: #1f1a0a;
+
+    --alert-error-bg: #2a1010;
+    --alert-error-fg: #fca5a5;
+    --alert-error-border: #ef4444;
+    --alert-warn-bg: #1f1a0a;
+    --alert-warn-fg: #fde68a;
+    --alert-warn-border: #78716c;
+
+    --focus-ring: rgb(34 197 94 / 30%);
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #050505;
+  --surface: #0f0f0f;
+  --surface-elevated: #161616;
+  --text: #fafafa;
+  --muted: #a3a3a3;
+  --border: #2e2e2e;
+  --border-subtle: #262626;
+  --input-bg: #141414;
+  --input-fg: #fafafa;
+
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --accent-soft: #0d2818;
+  --accent-fg: #ffffff;
+
+  --brand: #ef4444;
+  --buy: #22c55e;
+  --buy-bg: #0d2818;
+  --sell: #ef4444;
+  --sell-bg: #2a1010;
+
+  --row-warn: #1a1208;
+  --table-border: #262626;
+  --hover: #1a1a1a;
+  --pill-muted-bg: #262626;
+  --badge-neutral: #262626;
+  --workflow-track: #333333;
+  --workflow-done: #22c55e;
+  --overlay: rgb(0 0 0 / 75%);
+  --shadow: rgb(0 0 0 / 45%);
+  --card-accent-border: #22c55e;
+  --card-accent-gradient: linear-gradient(180deg, #0d2818 0%, #0f0f0f 140px);
+
+  --status-done-bg: #0d2818;
+  --status-executed-bg: #1a1a2e;
+  --status-sent-bg: #1f1a0a;
+
+  --alert-error-bg: #2a1010;
+  --alert-error-fg: #fca5a5;
+  --alert-error-border: #ef4444;
+  --alert-warn-bg: #1f1a0a;
+  --alert-warn-fg: #fde68a;
+  --alert-warn-border: #78716c;
+
+  --focus-ring: rgb(34 197 94 / 30%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: var(--input-fg);
+}

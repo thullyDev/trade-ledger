@@ -1,0 +1,32 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+frontend/dist/
+dist/
+build/
+*.tsbuildinfo
+
+# SQLite
+*.db
+*.db-journal
+database/.test.db
+
+# Env
+.env
+.env.local
+
+# IDE / local reference extract
+.reference/
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
