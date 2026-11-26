@@ -2,6 +2,17 @@
 
 A small web app for capturing trades before they go to the broker, built with FastAPI, React, and SQLite for a Corion Capital interview.
 
+## Quick start
+
+```bash
+git clone https://github.com/thullyDev/trade-ledger.git && cd trade-ledger && bash scripts/dev.sh
+```
+
+This creates the environment, seeds the database, and starts both servers.
+
+- UI: http://127.0.0.1:5173
+- API docs: http://127.0.0.1:8000/docs
+
 ## Screen recording
 
 https://drive.google.com/file/d/1jDlrqb02zgp5cIC0YN6daPJTLj2u20uw/view
@@ -71,12 +82,6 @@ If you start the backend in a new terminal, activate the virtual environment in 
 
 - UI: http://127.0.0.1:5173
 - API docs: http://127.0.0.1:8000/docs
-
-Or one command from the project root, which seeds the database and starts both servers:
-
-```bash
-bash scripts/dev.sh
-```
 
 ## Project layout
 

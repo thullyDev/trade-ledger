@@ -3,6 +3,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
+if [[ ! -f .env ]]; then
+  cp .env.example .env
+fi
+
 if [[ ! -d .venv ]]; then
   python3 -m venv .venv
 fi
@@ -15,6 +19,9 @@ python backend/seed.py
 if [[ ! -d frontend/node_modules ]]; then
   npm install --prefix frontend --silent
 fi
+
+echo "UI: http://127.0.0.1:5173"
+echo "API docs: http://127.0.0.1:8000/docs"
 
 trap 'kill $(jobs -p) 2>/dev/null || true' EXIT
 (
