@@ -29,7 +29,7 @@ scripts/dev.sh     one command to seed and run everything
 
 ## Screen recording
 
-Screen recording: VIDEO_LINK_HERE
+Screen recording: https://drive.google.com/file/d/1jDlrqb02zgp5cIC0YN6daPJTLj2u20uw/view
 
 ## How to run it
 
