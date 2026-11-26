@@ -95,19 +95,29 @@ def seed(database_path: Path, migrations_dir: Path, dry_run: bool = False) -> in
     return 0
 
 
+def _load_settings():
+    backend_dir = Path(__file__).resolve().parent
+    if str(backend_dir) not in sys.path:
+        sys.path.insert(0, str(backend_dir))
+    from app.config import get_settings, resolve_under_project_root
+
+    return get_settings(), resolve_under_project_root
+
+
 def main() -> int:
     root = project_root()
+    settings, resolve_path = _load_settings()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--database",
         type=Path,
-        default=root / "trade_ledger.db",
+        default=settings.database_path,
         help="SQLite database file path",
     )
     parser.add_argument(
         "--migrations-dir",
         type=Path,
-        default=root / "database",
+        default=settings.migrations_dir,
         help="Directory containing NNN_*.sql files",
     )
     parser.add_argument(
@@ -117,8 +127,13 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    database = resolve_path(args.database)
+    migrations_dir = args.migrations_dir
+    if not migrations_dir.is_absolute():
+        migrations_dir = (root / migrations_dir).resolve()
+
     try:
-        return seed(args.database, args.migrations_dir, dry_run=args.dry_run)
+        return seed(database, migrations_dir, dry_run=args.dry_run)
     except Exception as exc:
         print(f"seed failed: {exc}", file=sys.stderr)
         return 1

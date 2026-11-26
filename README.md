@@ -18,8 +18,8 @@ https://drive.google.com/file/d/1jDlrqb02zgp5cIC0YN6daPJTLj2u20uw/view
 
 ## Prerequisites
 
-- Python 3
-- Node.js
+- Python 3, tested with 3.13.5
+- Node.js, tested with 24.22.1
 
 ## Setup
 
@@ -33,9 +33,27 @@ python backend/seed.py
 cd frontend && npm install
 ```
 
-`backend/seed.py` builds `trade_ledger.db` from `database/001_schema.sql` and `database/002_data.sql`. The database file is not committed.
+On Windows, activate the virtual environment with:
+
+```bat
+.venv\Scripts\activate
+```
+
+The database lives at the project root as `trade_ledger.db`. `backend/seed.py` builds it from `database/001_schema.sql` and `database/002_data.sql`. The database file is not committed.
 
 ## Run
+
+From the project root, activate the virtual environment first. On macOS or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bat
+.venv\Scripts\activate
+```
 
 Backend:
 
@@ -48,6 +66,8 @@ Frontend, in a second terminal:
 ```bash
 cd frontend && npm run dev
 ```
+
+If you start the backend in a new terminal, activate the virtual environment in that terminal first.
 
 - UI: http://127.0.0.1:5173
 - API docs: http://127.0.0.1:8000/docs
